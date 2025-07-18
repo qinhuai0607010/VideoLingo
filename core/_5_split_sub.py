@@ -9,6 +9,7 @@ from rich.console import Console
 from rich.table import Table
 from core.utils import *
 from core.utils.models import *
+from core.utils.ask_gpt import ask_gpt_v2
 console = Console()
 
 # ! You can modify your own weights here
@@ -39,7 +40,7 @@ def align_subs(src_sub: str, tr_sub: str, src_part: str) -> Tuple[List[str], Lis
         if len(response_data['align']) < 2:
             return {"status": "error", "message": "Align does not contain more than 1 part as expected!"}
         return {"status": "success", "message": "Align completed"}
-    parsed = ask_gpt(align_prompt, resp_type='json', valid_def=valid_align, log_title='align_subs')
+    parsed = ask_gpt_v2(align_prompt, resp_type='json', valid_def=valid_align, log_title='align_subs')
     align_data = parsed['align']
     src_parts = src_part.split('\n')
     tr_parts = [item[f'target_part_{i+1}'].strip() for i, item in enumerate(align_data)]

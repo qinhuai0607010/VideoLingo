@@ -6,6 +6,7 @@ from core.spacy_utils.load_nlp_model import init_nlp
 from core.utils import *
 from rich.console import Console
 from rich.table import Table
+from core.utils.ask_gpt import ask_gpt_v2
 from core.utils.models import _3_1_SPLIT_BY_NLP, _3_2_SPLIT_BY_MEANING
 console = Console()
 
@@ -56,7 +57,7 @@ def split_sentence(sentence, num_parts, word_limit=20, index=-1, retry_attempt=0
             return {"status": "error", "message": "Split failed, no [br] found"}
         return {"status": "success", "message": "Split completed"}
     
-    response_data = ask_gpt(split_prompt + " " * retry_attempt, resp_type='json', valid_def=valid_split, log_title='split_by_meaning')
+    response_data = ask_gpt_v2(split_prompt + " " * retry_attempt, resp_type='json', valid_def=valid_split, log_title='split_by_meaning')
     choice = response_data["choice"]
     best_split = response_data[f"split{choice}"]
     split_points = find_split_positions(sentence, best_split)
